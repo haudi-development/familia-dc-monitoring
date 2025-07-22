@@ -5,6 +5,7 @@ import { Rack, Sensor, MetricType } from '@/lib/types'
 import { getHeatmapColor, formatMetricValue } from '@/lib/utils'
 import { determineSensorPositions } from '@/lib/rack-utils'
 import { cn } from '@/lib/cn'
+import { Wind, ArrowRight } from 'lucide-react'
 
 interface RackLayoutDualProps {
   racks: Rack[]
@@ -34,15 +35,37 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
   return (
     <div className="bg-white rounded-lg shadow-sm border border-[var(--color-border)] p-6 overflow-x-auto">
       <div className="min-w-[1400px]">
-        {/* Column labels (A-Q) */}
-        <div className="flex mb-2">
+        {/* 通路インジケーター（上部） */}
+        <div className="flex mb-3">
           <div className="w-10"></div>
           <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-            {[...Array(maxCol)].map((_, i) => (
-              <div key={i} className="w-14 text-center text-sm font-bold text-gray-700">
-                {String.fromCharCode(65 + i)}
-              </div>
-            ))}
+            {[...Array(maxCol)].map((_, i) => {
+              const col = String.fromCharCode(65 + i)
+              const isIntakeCorridor = i === 0 || (i >= 2 && i % 2 === 0 && i < 16)
+              const isExhaustCorridor = i === 1 || (i >= 3 && i % 2 === 1) || i === 16
+              
+              return (
+                <div key={i} className="w-14 flex flex-col items-center">
+                  <div className="h-6 w-full flex items-center justify-center mb-1">
+                    {isIntakeCorridor && (
+                      <div className="flex items-center space-x-1 text-blue-500">
+                        <Wind className="h-3 w-3" />
+                        <span className="text-[10px] font-medium">吸気</span>
+                      </div>
+                    )}
+                    {isExhaustCorridor && (
+                      <div className="flex items-center space-x-1 text-red-500">
+                        <ArrowRight className="h-3 w-3" />
+                        <span className="text-[10px] font-medium">排気</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-sm font-bold text-gray-700">
+                    {col}
+                  </div>
+                </div>
+              )
+            })}
           </div>
           <div className="w-10"></div>
         </div>
@@ -148,15 +171,37 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
           </div>
         </div>
         
-        {/* Column labels at the bottom */}
-        <div className="flex mt-2">
+        {/* 通路インジケーター（下部） */}
+        <div className="flex mt-3">
           <div className="w-10"></div>
           <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-            {[...Array(maxCol)].map((_, i) => (
-              <div key={i} className="w-14 text-center text-sm font-bold text-gray-700">
-                {String.fromCharCode(65 + i)}
-              </div>
-            ))}
+            {[...Array(maxCol)].map((_, i) => {
+              const col = String.fromCharCode(65 + i)
+              const isIntakeCorridor = i === 0 || (i >= 2 && i % 2 === 0 && i < 16)
+              const isExhaustCorridor = i === 1 || (i >= 3 && i % 2 === 1) || i === 16
+              
+              return (
+                <div key={i} className="w-14 flex flex-col items-center">
+                  <div className="text-sm font-bold text-gray-700 mb-1">
+                    {col}
+                  </div>
+                  <div className="h-6 w-full flex items-center justify-center">
+                    {isIntakeCorridor && (
+                      <div className="flex items-center space-x-1 text-blue-500">
+                        <Wind className="h-3 w-3" />
+                        <span className="text-[10px] font-medium">吸気</span>
+                      </div>
+                    )}
+                    {isExhaustCorridor && (
+                      <div className="flex items-center space-x-1 text-red-500">
+                        <ArrowRight className="h-3 w-3" />
+                        <span className="text-[10px] font-medium">排気</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
           </div>
           <div className="w-10"></div>
         </div>
@@ -187,14 +232,20 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
           </div>
           
           {/* 通路説明 */}
-          <div className="flex items-center justify-center space-x-8 text-sm text-gray-600">
-            <div className="flex items-center space-x-2">
-              <span className="font-medium">吸気側通路:</span>
-              <span>A-B, C-D, E-F, G-H, I-J, K-L, M-N, O-P</span>
+          <div className="flex items-center justify-center space-x-8 text-sm">
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-1 text-blue-600">
+                <Wind className="h-4 w-4" />
+                <span className="font-medium">吸気側通路</span>
+              </div>
+              <span className="text-gray-500">冷気が流入する通路</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="font-medium">排気側通路:</span>
-              <span>Aの左, B-C, D-E, F-G, H-I, J-K, L-M, N-O, P-Q, Qの右</span>
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-1 text-red-600">
+                <ArrowRight className="h-4 w-4" />
+                <span className="font-medium">排気側通路</span>
+              </div>
+              <span className="text-gray-500">暖気が排出される通路</span>
             </div>
           </div>
         </div>
