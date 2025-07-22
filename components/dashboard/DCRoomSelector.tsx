@@ -12,11 +12,11 @@ interface DCRoomSelectorProps {
 }
 
 export function DCRoomSelector({ selectedDC, selectedRoom, onDCChange, onRoomChange }: DCRoomSelectorProps) {
-  const [availableRooms, setAvailableRooms] = useState(ROOMS.filter(room => room.dc_id === selectedDC))
+  const [availableRooms, setAvailableRooms] = useState(Object.values(ROOMS).filter(room => room.dc_id === selectedDC))
   
   useEffect(() => {
     // Update available rooms when DC changes
-    const newRooms = ROOMS.filter(room => room.dc_id === selectedDC)
+    const newRooms = Object.values(ROOMS).filter(room => room.dc_id === selectedDC)
     setAvailableRooms(newRooms)
     
     // If current room is not in the new DC, select the first room
@@ -25,8 +25,8 @@ export function DCRoomSelector({ selectedDC, selectedRoom, onDCChange, onRoomCha
     }
   }, [selectedDC, selectedRoom, onRoomChange])
   
-  const selectedDCData = DATA_CENTERS.find(dc => dc.dc_id === selectedDC)
-  const selectedRoomData = ROOMS.find(room => room.room_id === selectedRoom)
+  const selectedDCData = DATA_CENTERS[selectedDC]
+  const selectedRoomData = ROOMS[selectedRoom]
   
   return (
     <div className="flex items-center space-x-3">
@@ -39,9 +39,9 @@ export function DCRoomSelector({ selectedDC, selectedRoom, onDCChange, onRoomCha
             onChange={(e) => onDCChange(e.target.value)}
             className="appearance-none bg-white border border-gray-300 rounded-md pl-10 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"
           >
-            {DATA_CENTERS.map(dc => (
+            {Object.values(DATA_CENTERS).map(dc => (
               <option key={dc.dc_id} value={dc.dc_id}>
-                {dc.dc_name}
+                {dc.name}
               </option>
             ))}
           </select>
@@ -61,7 +61,7 @@ export function DCRoomSelector({ selectedDC, selectedRoom, onDCChange, onRoomCha
           >
             {availableRooms.map(room => (
               <option key={room.room_id} value={room.room_id}>
-                {room.room_name}
+                {room.name}
               </option>
             ))}
           </select>

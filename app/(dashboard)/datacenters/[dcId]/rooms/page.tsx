@@ -10,8 +10,8 @@ export default function RoomsPage() {
   const params = useParams()
   const dcId = params.dcId as string
   
-  const dataCenter = DATA_CENTERS.find(dc => dc.dc_id === dcId)
-  const rooms = ROOMS.filter(room => room.dc_id === dcId)
+  const dataCenter = DATA_CENTERS[dcId]
+  const rooms = Object.values(ROOMS).filter(room => room.dc_id === dcId)
   
   // ダミーの統計データ
   const getRoomStats = (roomId: string) => {
@@ -44,7 +44,7 @@ export default function RoomsPage() {
             <ArrowLeft className="w-4 h-4 mr-1" />
             データセンター一覧に戻る
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">{dataCenter.dc_name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{dataCenter.name}</h1>
           <p className="text-gray-600 mt-1">ルーム一覧</p>
         </div>
       </div>
@@ -64,7 +64,7 @@ export default function RoomsPage() {
                   <div className="flex items-center space-x-3">
                     <Server className="w-6 h-6 text-[var(--color-primary)]" />
                     <div>
-                      <h2 className="text-lg font-bold text-gray-900">{room.room_name}</h2>
+                      <h2 className="text-lg font-bold text-gray-900">{room.name}</h2>
                       <p className="text-sm text-gray-500">
                         稼働中: {stats.activeRacks}/{room.rack_count} ラック
                       </p>
