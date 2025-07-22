@@ -89,3 +89,26 @@ export interface AlertRule {
   lastTriggered: Date | null
   triggerCount: number
 }
+
+export type AlertSeverity = 'low' | 'medium' | 'high' | 'critical'
+export type AlertStatus = 'active' | 'resolved' | 'acknowledged'
+
+export interface AlertHistory {
+  id: string
+  ruleId: string
+  ruleName: string
+  severity: AlertSeverity
+  status: AlertStatus
+  triggeredAt: Date
+  resolvedAt: Date | null
+  acknowledgedAt: Date | null
+  acknowledgedBy: string | null
+  sensorId: string
+  rackId: string
+  roomId: string
+  dcId: string
+  metricType: MetricType
+  actualValue: number
+  thresholdValue: number
+  message: string
+}
