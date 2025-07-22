@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  --color-primary: #50A69F;
+  --color-primary-dark: #3D8078;
+  --color-primary-light: #6DB8B2;
+  --color-background: #FFFFFF;
+  --color-text: #333333;
+  --color-border: #E0E0E0;
+  
+  --color-heatmap-cold: #2196F3;
+  --color-heatmap-normal: #4CAF50;
+  --color-heatmap-warm: #FFC107;
+  --color-heatmap-hot: #FF9800;
+  --color-heatmap-critical: #F44336;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: rgb(55 65 81);
+  border-radius: 0.5rem;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover {
+  background-color: rgb(80 166 159 / 0.1);
+  color: var(--color-primary-dark);
+}
+
+.sidebar-link.active {
+  background-color: rgb(80 166 159 / 0.1);
+  color: var(--color-primary-dark);
+  font-weight: 500;
+}
+
+.metric-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  border: 1px solid var(--color-border);
+  padding: 1.5rem;
+}
+
+.heatmap-cell {
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.1);
 }
