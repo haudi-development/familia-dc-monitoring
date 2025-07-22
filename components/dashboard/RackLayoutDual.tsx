@@ -36,36 +36,42 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
     <div className="bg-white rounded-lg shadow-sm border border-[var(--color-border)] p-6 overflow-x-auto">
       <div className="min-w-[1400px]">
         {/* 通路インジケーター（上部） */}
-        <div className="flex mb-3">
+        <div className="mb-1">
+          <div className="flex items-center justify-center">
+            <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
+              {[...Array(maxCol)].map((_, i) => {
+                const isIntakeLeft = i === 0 || (i >= 2 && i % 2 === 0 && i < 16)
+                const isExhaustRight = i === 1 || (i >= 3 && i % 2 === 1) || i === 16
+                const isIntakeRight = i === 1 || (i >= 3 && i % 2 === 1 && i < 15)
+                const isExhaustLeft = (i >= 2 && i % 2 === 0) || i === 16
+                
+                return (
+                  <div key={i} className="w-14 flex items-center justify-center text-[10px] font-medium h-6">
+                    {isIntakeLeft && (
+                      <span className="text-blue-500">←吸気</span>
+                    )}
+                    {isIntakeRight && isExhaustRight && i < 16 && (
+                      <span className="text-red-500">排気→</span>
+                    )}
+                    {i === 16 && (
+                      <span className="text-red-500">排気→</span>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+        
+        {/* Column labels (A-Q) */}
+        <div className="flex mb-2">
           <div className="w-10"></div>
           <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-            {[...Array(maxCol)].map((_, i) => {
-              const col = String.fromCharCode(65 + i)
-              const isIntakeCorridor = i === 0 || (i >= 2 && i % 2 === 0 && i < 16)
-              const isExhaustCorridor = i === 1 || (i >= 3 && i % 2 === 1) || i === 16
-              
-              return (
-                <div key={i} className="w-14 flex flex-col items-center">
-                  <div className="h-6 w-full flex items-center justify-center mb-1">
-                    {isIntakeCorridor && (
-                      <div className="flex items-center space-x-1 text-blue-500">
-                        <Wind className="h-3 w-3" />
-                        <span className="text-[10px] font-medium">吸気</span>
-                      </div>
-                    )}
-                    {isExhaustCorridor && (
-                      <div className="flex items-center space-x-1 text-red-500">
-                        <ArrowRight className="h-3 w-3" />
-                        <span className="text-[10px] font-medium">排気</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="text-sm font-bold text-gray-700">
-                    {col}
-                  </div>
-                </div>
-              )
-            })}
+            {[...Array(maxCol)].map((_, i) => (
+              <div key={i} className="w-14 text-center text-sm font-bold text-gray-700">
+                {String.fromCharCode(65 + i)}
+              </div>
+            ))}
           </div>
           <div className="w-10"></div>
         </div>
@@ -171,39 +177,45 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
           </div>
         </div>
         
-        {/* 通路インジケーター（下部） */}
-        <div className="flex mt-3">
+        {/* Column labels at the bottom */}
+        <div className="flex mt-2">
           <div className="w-10"></div>
           <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-            {[...Array(maxCol)].map((_, i) => {
-              const col = String.fromCharCode(65 + i)
-              const isIntakeCorridor = i === 0 || (i >= 2 && i % 2 === 0 && i < 16)
-              const isExhaustCorridor = i === 1 || (i >= 3 && i % 2 === 1) || i === 16
-              
-              return (
-                <div key={i} className="w-14 flex flex-col items-center">
-                  <div className="text-sm font-bold text-gray-700 mb-1">
-                    {col}
-                  </div>
-                  <div className="h-6 w-full flex items-center justify-center">
-                    {isIntakeCorridor && (
-                      <div className="flex items-center space-x-1 text-blue-500">
-                        <Wind className="h-3 w-3" />
-                        <span className="text-[10px] font-medium">吸気</span>
-                      </div>
-                    )}
-                    {isExhaustCorridor && (
-                      <div className="flex items-center space-x-1 text-red-500">
-                        <ArrowRight className="h-3 w-3" />
-                        <span className="text-[10px] font-medium">排気</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )
-            })}
+            {[...Array(maxCol)].map((_, i) => (
+              <div key={i} className="w-14 text-center text-sm font-bold text-gray-700">
+                {String.fromCharCode(65 + i)}
+              </div>
+            ))}
           </div>
           <div className="w-10"></div>
+        </div>
+        
+        {/* 通路インジケーター（下部） */}
+        <div className="mt-1">
+          <div className="flex items-center justify-center">
+            <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
+              {[...Array(maxCol)].map((_, i) => {
+                const isIntakeLeft = i === 0 || (i >= 2 && i % 2 === 0 && i < 16)
+                const isExhaustRight = i === 1 || (i >= 3 && i % 2 === 1) || i === 16
+                const isIntakeRight = i === 1 || (i >= 3 && i % 2 === 1 && i < 15)
+                const isExhaustLeft = (i >= 2 && i % 2 === 0) || i === 16
+                
+                return (
+                  <div key={i} className="w-14 flex items-center justify-center text-[10px] font-medium h-6">
+                    {isIntakeLeft && (
+                      <span className="text-blue-500">←吸気</span>
+                    )}
+                    {isIntakeRight && isExhaustRight && i < 16 && (
+                      <span className="text-red-500">排気→</span>
+                    )}
+                    {i === 16 && (
+                      <span className="text-red-500">排気→</span>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
         
         {/* Legend */}
