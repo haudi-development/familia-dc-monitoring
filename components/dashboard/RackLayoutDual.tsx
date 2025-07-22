@@ -35,45 +35,82 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
   return (
     <div className="bg-white rounded-lg shadow-sm border border-[var(--color-border)] p-6 overflow-x-auto">
       <div className="min-w-[1400px]">
-        {/* 通路インジケーター（上部） */}
-        <div className="mb-1">
-          <div className="flex items-center justify-center">
-            <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-              {[...Array(maxCol)].map((_, i) => {
-                const isIntakeLeft = i === 0 || (i >= 2 && i % 2 === 0 && i < 16)
-                const isExhaustRight = i === 1 || (i >= 3 && i % 2 === 1) || i === 16
-                const isIntakeRight = i === 1 || (i >= 3 && i % 2 === 1 && i < 15)
-                const isExhaustLeft = (i >= 2 && i % 2 === 0) || i === 16
-                
-                return (
-                  <div key={i} className="w-14 flex items-center justify-center text-[10px] font-medium h-6">
-                    {isIntakeLeft && (
-                      <span className="text-blue-500">←吸気</span>
-                    )}
-                    {isIntakeRight && isExhaustRight && i < 16 && (
-                      <span className="text-red-500">排気→</span>
-                    )}
-                    {i === 16 && (
-                      <span className="text-red-500">排気→</span>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-        
-        {/* Column labels (A-Q) */}
-        <div className="flex mb-2">
-          <div className="w-10"></div>
-          <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-            {[...Array(maxCol)].map((_, i) => (
-              <div key={i} className="w-14 text-center text-sm font-bold text-gray-700">
-                {String.fromCharCode(65 + i)}
+        {/* Column labels with corridor indicators */}
+        <div className="relative mb-2">
+          {/* 通路表示 */}
+          <div className="absolute top-0 left-0 right-0 flex">
+            <div className="w-10"></div>
+            <div className="relative" style={{ width: 'calc(100% - 5rem)' }}>
+              {/* 吸気通路 */}
+              <div className="absolute left-0" style={{ left: 'calc(14px + 14px / 2 - 2px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-blue-600">吸気</span>
               </div>
-            ))}
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 2 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-blue-600">吸気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 4 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-blue-600">吸気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 6 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-blue-600">吸気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 8 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-blue-600">吸気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 10 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-blue-600">吸気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 12 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-blue-600">吸気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 14 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-blue-600">吸気</span>
+              </div>
+              
+              {/* 排気通路 */}
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 1 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-red-600">排気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 3 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-red-600">排気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 5 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-red-600">排気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 7 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-red-600">排気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 9 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-red-600">排気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 11 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-red-600">排気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 13 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-red-600">排気</span>
+              </div>
+              <div className="absolute" style={{ left: 'calc((56px + 20px) * 15 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-red-600">排気</span>
+              </div>
+              <div className="absolute right-0" style={{ right: 'calc(14px / 2 - 12px)', top: '-20px' }}>
+                <span className="text-[11px] font-medium text-red-600">排気</span>
+              </div>
+            </div>
+            <div className="w-10"></div>
           </div>
-          <div className="w-10"></div>
+          
+          {/* Column labels */}
+          <div className="flex mt-6">
+            <div className="w-10"></div>
+            <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
+              {[...Array(maxCol)].map((_, i) => (
+                <div key={i} className="w-14 text-center text-sm font-bold text-gray-700">
+                  {String.fromCharCode(65 + i)}
+                </div>
+              ))}
+            </div>
+            <div className="w-10"></div>
+          </div>
         </div>
         
         {/* Rack grid with row numbers */}
@@ -188,34 +225,6 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
             ))}
           </div>
           <div className="w-10"></div>
-        </div>
-        
-        {/* 通路インジケーター（下部） */}
-        <div className="mt-1">
-          <div className="flex items-center justify-center">
-            <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-              {[...Array(maxCol)].map((_, i) => {
-                const isIntakeLeft = i === 0 || (i >= 2 && i % 2 === 0 && i < 16)
-                const isExhaustRight = i === 1 || (i >= 3 && i % 2 === 1) || i === 16
-                const isIntakeRight = i === 1 || (i >= 3 && i % 2 === 1 && i < 15)
-                const isExhaustLeft = (i >= 2 && i % 2 === 0) || i === 16
-                
-                return (
-                  <div key={i} className="w-14 flex items-center justify-center text-[10px] font-medium h-6">
-                    {isIntakeLeft && (
-                      <span className="text-blue-500">←吸気</span>
-                    )}
-                    {isIntakeRight && isExhaustRight && i < 16 && (
-                      <span className="text-red-500">排気→</span>
-                    )}
-                    {i === 16 && (
-                      <span className="text-red-500">排気→</span>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </div>
         </div>
         
         {/* Legend */}
