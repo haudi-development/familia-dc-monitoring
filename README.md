@@ -1,89 +1,82 @@
-# Familia for DC - Data Center Monitoring System
+# Familia for DC - データセンター監視システム
 
-株式会社アイネット様向けのデータセンター監視システムです。IoTプラットフォーム「Familia」のデータセンター特化バージョンとして開発されました。
+株式会社アイネット向けIoTデータセンター監視システム
 
-## 🌟 機能
+## 概要
 
-- **リアルタイムモニタリング**: 340個のセンサーから温度・湿度・風量データを収集・表示
-- **2Dヒートマップ**: 17列×10行のラック配置図上でデータを可視化
-- **マルチDC/マルチルーム対応**: 複数のデータセンターとルームを管理
-- **センサー比較グラフ**: 最大10個のセンサーを選択して時系列データを比較
-- **アラート管理**: IFTTT風のIF-THENルールでアラートを設定
-- **データエクスポート**: CSVフォーマットでデータをエクスポート
+Familia for DCは、データセンター内の340個のセンサー（170ラック×2センサー）をリアルタイムで監視し、温度、湿度、風量のデータを視覚化するWebアプリケーションです。
 
-## 🛠 技術スタック
+## 主な機能
 
-- **フロントエンド**: Next.js 14 (App Router), TypeScript, Tailwind CSS v4
+- **リアルタイム監視**: 17列×10行のラック配置をヒートマップで表示
+- **マルチDC/ルーム対応**: 複数のデータセンターとルームを管理
+- **吸気/排気側分割表示**: 各ラックの吸気側と排気側を別々に監視
+- **アラート管理**: IFTTT風のルール設定と履歴管理
+- **データ分析**: センサー比較グラフとCSVエクスポート
+- **ユーザー管理**: ロールベースのアクセス制御
+
+## 技術スタック
+
+- **フレームワーク**: Next.js 14 (App Router)
+- **言語**: TypeScript
+- **スタイリング**: Tailwind CSS v4
 - **グラフ**: Recharts
 - **アイコン**: Lucide React
-- **デプロイ**: Vercel
 
-## 🚀 セットアップ
+## セットアップ
 
-### 必要な環境
+### 必要条件
 
 - Node.js 18.17以上
-- npm または yarn
+- npmまたはpnpm
 
 ### インストール
 
 ```bash
-# リポジトリをクローン
+# リポジトリのクローン
 git clone https://github.com/haudi-development/familia-dc-monitoring.git
 cd familia-dc-monitoring
 
-# 依存関係をインストール
+# 依存関係のインストール
 npm install
 
-# 開発サーバーを起動（ポート3000）
+# 開発サーバーの起動
 npm run dev
 ```
 
-### ビルド
+### ログイン情報（デモ用）
+
+- ユーザー名: admin
+- パスワード: password123
+
+## プロジェクト構造
+
+```
+familia-dc-monitoring/
+├── app/                    # Next.js App Router
+│   ├── (dashboard)/       # ダッシュボードレイアウト
+│   ├── api/               # APIルート
+│   └── login/             # ログインページ
+├── components/            # Reactコンポーネント
+│   ├── dashboard/         # ダッシュボードコンポーネント
+│   └── layout/            # レイアウトコンポーネント
+└── lib/                   # ユーティリティ関数、型定義等
+```
+
+## ビルドとデプロイ
 
 ```bash
 # プロダクションビルド
 npm run build
 
-# プロダクション実行
-npm start
+# ビルドの確認
+npm run start
 ```
 
-## 📊 システム構成
+## Vercelへのデプロイ
 
-### センサー配置
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fhaudi-development%2Ffamilia-dc-monitoring)
 
-- **ラック数**: 170ラック（17列×10行）
-- **センサー数**: 340個（各ラックに吸気側・排気側センサー）
-- **吸気側通路**: A-B, C-D, E-F, G-H, I-J, K-L, M-N, O-P
-- **排気側通路**: Aの左, B-C, D-E, F-G, H-I, J-K, L-M, N-O, P-Q, Qの右
+## ライセンス
 
-### データ構造
-
-- 各センサーは温度（°C）、湿度（%）、風量（CFM）を測定
-- 1分ごとにデータを更新（現在はダミーデータ）
-- 将来的にMQTT経由でリアルタイムデータを取得予定
-
-## 🎨 デザイン
-
-- **プライマリカラー**: #50A69F（ティール）
-- **ヒートマップ**: 青（低温）→ 緑（標準）→ 黄（注意）→ オレンジ（警告）→ 赤（危険）
-- **レスポンシブデザイン**: デスクトップ/タブレット対応
-
-## 📝 開発ルール
-
-詳細は [/docs/DEVELOPMENT_RULES.md](./docs/DEVELOPMENT_RULES.md) を参照してください。
-
-## 🔒 ライセンス
-
-このプロジェクトは株式会社アイネット様向けのプライベートプロジェクトです。
-
-## 👥 開発チーム
-
-- haudi-development
-
----
-
-🤖 Generated with [Claude Code](https://claude.ai/code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>
+MIT
