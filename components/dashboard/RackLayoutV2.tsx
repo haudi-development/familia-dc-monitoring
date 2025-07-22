@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Rack, Sensor, MetricType } from '@/lib/types'
 import { getHeatmapColor, formatMetricValue } from '@/lib/utils'
 import { cn } from '@/lib/cn'
-import { Router, Server, Zap } from 'lucide-react'
+import { Router, Zap } from 'lucide-react'
 
 interface RackLayoutV2Props {
   racks: Rack[]
@@ -20,7 +20,7 @@ export function RackLayoutV2({ racks, sensors, metricType, onRackClick }: RackLa
   const sensorMap = new Map<string, { front: Sensor; back: Sensor }>()
   sensors.forEach(sensor => {
     const existing = sensorMap.get(sensor.rack_id) || { front: null!, back: null! }
-    if (sensor.position === 'front') {
+    if (sensor.position === 'intake') {
       existing.front = sensor
     } else {
       existing.back = sensor

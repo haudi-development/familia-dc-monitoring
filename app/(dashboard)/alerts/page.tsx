@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Bell, AlertTriangle, CheckCircle, X, Edit2, Trash2, Clock, CheckCircle2, XCircle, AlertCircle, Filter, Settings } from 'lucide-react'
+import { Plus, Bell, AlertTriangle, CheckCircle, Edit2, Trash2, Clock, CheckCircle2, AlertCircle, Filter, Settings } from 'lucide-react'
 import { AlertRule, AlertCondition, AlertAction, AlertHistory, AlertSeverity, AlertStatus } from '@/lib/types'
 import { AlertRuleModal } from '@/components/dashboard/AlertRuleModal'
 import { DATA_CENTERS, ROOMS } from '@/lib/constants'

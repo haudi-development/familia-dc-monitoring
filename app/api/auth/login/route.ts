@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'ログイン処理中にエラーが発生しました' },
       { status: 500 }

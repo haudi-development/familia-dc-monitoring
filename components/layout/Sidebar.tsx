@@ -7,7 +7,6 @@ import {
   Database, 
   AlertCircle, 
   Users,
-  Settings,
   Building2
 } from 'lucide-react'
 import { cn } from '@/lib/cn'

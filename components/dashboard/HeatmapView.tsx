@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { MetricType } from '@/lib/types'
 import { getMetricLabel } from '@/lib/utils'
 import { cn } from '@/lib/cn'

@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { ArrowLeft, Server, Thermometer, Droplets, Wind, AlertCircle } from 'lucide-react'
@@ -14,7 +13,8 @@ export default function RoomsPage() {
   const rooms = Object.values(ROOMS).filter(room => room.dc_id === dcId)
   
   // ダミーの統計データ
-  const getRoomStats = (roomId: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const getRoomStats = (_roomId: string) => {
     const avgTemp = 22 + Math.random() * 4
     const avgHumidity = 40 + Math.random() * 10
     const avgAirflow = 110 + Math.random() * 20

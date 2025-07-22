@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const existing = sensorMap.get(sensor.rack_id) || { front: 0, back: 0 }
     const value = sensor[type]
     
-    if (sensor.position === 'front') {
+    if (sensor.position === 'intake') {
       existing.front = value
     } else {
       existing.back = value

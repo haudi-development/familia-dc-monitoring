@@ -25,9 +25,6 @@ export function DCRoomSelector({ selectedDC, selectedRoom, onDCChange, onRoomCha
     }
   }, [selectedDC, selectedRoom, onRoomChange])
   
-  const selectedDCData = DATA_CENTERS[selectedDC]
-  const selectedRoomData = ROOMS[selectedRoom]
-  
   return (
     <div className="flex items-center space-x-3">
       {/* DC Selector */}

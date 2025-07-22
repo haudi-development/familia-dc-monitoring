@@ -1,46 +1,6 @@
 import { Sensor, Rack } from './types'
-import { getSensorPosition, determineSensorPositions } from './rack-utils'
+import { determineSensorPositions } from './rack-utils'
 
-// ラック配置定義（17列構成）
-const rackLayout: { [key: string]: { row: number; col: number; type?: 'poe_hub' | 'router' } } = {
-  // Row 1
-  'RACK-01': { row: 1, col: 1 },
-  'RACK-02': { row: 1, col: 2 },
-  'RACK-03': { row: 1, col: 3 },
-  'RACK-04': { row: 1, col: 4 },
-  'RACK-05': { row: 1, col: 5 },
-  'RACK-06': { row: 1, col: 6 },
-  'RACK-07': { row: 1, col: 7 },
-  'RACK-08': { row: 1, col: 8 },
-  'RACK-09': { row: 1, col: 9 },
-  'RACK-10': { row: 1, col: 10 },
-  'RACK-11': { row: 1, col: 11 },
-  'RACK-12': { row: 1, col: 12 },
-  'RACK-13': { row: 1, col: 13 },
-  'RACK-14': { row: 1, col: 14 },
-  'RACK-15': { row: 1, col: 15 },
-  'RACK-16': { row: 1, col: 16 },
-  'RACK-17': { row: 1, col: 17 },
-  // Row 2
-  'RACK-18': { row: 2, col: 1 },
-  'RACK-19': { row: 2, col: 2 },
-  'RACK-20': { row: 2, col: 3 },
-  'RACK-21': { row: 2, col: 4 },
-  'RACK-22': { row: 2, col: 5 },
-  'RACK-23': { row: 2, col: 6 },
-  'RACK-24': { row: 2, col: 7 },
-  'RACK-25': { row: 2, col: 8 },
-  'RACK-26': { row: 2, col: 9 },
-  'RACK-27': { row: 2, col: 10 },
-  'RACK-28': { row: 2, col: 11 },
-  'RACK-29': { row: 2, col: 12 },
-  'RACK-30': { row: 2, col: 13 },
-  'RACK-31': { row: 2, col: 14 },
-  'RACK-32': { row: 2, col: 15 },
-  'RACK-33': { row: 2, col: 16 },
-  'RACK-34': { row: 2, col: 17 },
-  // Add more rows as needed up to 170 racks total
-}
 
 // Generate full rack layout for a specific room
 export function generateRackLayoutForRoom(roomId: string, dcId: string): Rack[] {
@@ -124,7 +84,7 @@ export function generateDummySensorDataForRoom(roomId: string, dcId: string): Se
   
   for (const rack of racks) {
     // Determine sensor positions based on rack location
-    const positions = determineSensorPositions(rack)
+    determineSensorPositions(rack)
     
     // Intake sensor
     const intakeTemp = generateTemperature(baseTemp, 'intake', rack.row, rack.col)

@@ -66,7 +66,7 @@ export function SensorComparisonGraph({
       const time = new Date(now.getTime() - i * 60 * 60 * 1000)
       const hour = time.getHours()
       
-      const dataPoint: any = {
+      const dataPoint: Record<string, string | number> = {
         time: `${hour.toString().padStart(2, '0')}:00`,
       }
       

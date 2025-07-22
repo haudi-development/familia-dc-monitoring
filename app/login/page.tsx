@@ -34,7 +34,7 @@ export default function LoginPage() {
       } else {
         setError(data.error || 'ログインに失敗しました')
       }
-    } catch (error) {
+    } catch {
       setError('ログイン処理中にエラーが発生しました')
     } finally {
       setIsLoading(false)

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { X, Plus, Trash2 } from 'lucide-react'
 import { AlertRule, AlertCondition, AlertAction, MetricType } from '@/lib/types'
-import { DATA_CENTERS, ROOMS } from '@/lib/constants'
 
 interface AlertRuleModalProps {
   rule: AlertRule | null
@@ -46,7 +45,7 @@ export function AlertRuleModal({ rule, isOpen, onClose, onSave }: AlertRuleModal
     setConditions(conditions.filter((_, i) => i !== index))
   }
 
-  const handleUpdateCondition = (index: number, field: keyof AlertCondition, value: any) => {
+  const handleUpdateCondition = (index: number, field: keyof AlertCondition, value: string | number | MetricType) => {
     const updated = [...conditions]
     updated[index] = { ...updated[index], [field]: value }
     setConditions(updated)
@@ -60,20 +59,21 @@ export function AlertRuleModal({ rule, isOpen, onClose, onSave }: AlertRuleModal
     setActions(actions.filter((_, i) => i !== index))
   }
 
-  const handleUpdateAction = (index: number, field: 'type' | 'config', value: any) => {
+  const handleUpdateAction = (index: number, field: 'type' | 'config', value: string | Record<string, string>) => {
     const updated = [...actions]
     if (field === 'type') {
-      let newConfig = {}
-      if (value === 'email') {
+      let newConfig: Record<string, string> = {}
+      const actionType = value as 'email' | 'webhook' | 'slack'
+      if (actionType === 'email') {
         newConfig = { to: '', subject: '' }
-      } else if (value === 'webhook') {
+      } else if (actionType === 'webhook') {
         newConfig = { url: '', method: 'POST' }
-      } else if (value === 'slack') {
+      } else if (actionType === 'slack') {
         newConfig = { channel: '', message: '' }
       }
-      updated[index] = { type: value, config: newConfig }
+      updated[index] = { type: actionType, config: newConfig }
     } else {
-      updated[index] = { ...updated[index], [field]: value }
+      updated[index] = { ...updated[index], config: value as Record<string, string> }
     }
     setActions(updated)
   }

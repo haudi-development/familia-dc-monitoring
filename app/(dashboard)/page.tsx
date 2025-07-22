@@ -8,7 +8,6 @@ import { RackDetailModal } from '@/components/dashboard/RackDetailModal'
 import { DCRoomSelector } from '@/components/dashboard/DCRoomSelector'
 import { generateRackLayoutForRoom, generateDummySensorDataForRoom, updateSensorData } from '@/lib/dummy-data'
 import { Rack, Sensor, MetricType, MetricCard } from '@/lib/types'
-import { DATA_CENTERS, ROOMS } from '@/lib/constants'
 
 export default function DashboardPage() {
   const [selectedDC, setSelectedDC] = useState<string>('DC-001')

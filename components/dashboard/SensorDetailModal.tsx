@@ -25,8 +25,6 @@ interface SensorDetailModalProps {
 }
 
 export function SensorDetailModal({ sensor, isOpen, onClose }: SensorDetailModalProps) {
-  if (!isOpen) return null
-
   // Generate historical data for the last 24 hours
   const historicalData = useMemo(() => {
     const data = []
@@ -54,6 +52,8 @@ export function SensorDetailModal({ sensor, isOpen, onClose }: SensorDetailModal
 
   const dc = DATA_CENTERS[sensor.dc_id]
   const room = ROOMS[sensor.room_id]
+
+  if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { UserPlus, Edit2, Trash2, Shield, User, Mail, Calendar, CheckCircle, XCircle } from 'lucide-react'
+import { UserPlus, Edit2, Trash2, Shield, User, Calendar, CheckCircle, XCircle } from 'lucide-react'
 
 interface User {
   id: string

@@ -20,7 +20,7 @@ export function RackLayout({ racks, sensors, metricType, onRackClick }: RackLayo
   const sensorMap = new Map<string, { front: Sensor; back: Sensor }>()
   sensors.forEach(sensor => {
     const existing = sensorMap.get(sensor.rack_id) || { front: null!, back: null! }
-    if (sensor.position === 'front') {
+    if (sensor.position === 'intake') {
       existing.front = sensor
     } else {
       existing.back = sensor

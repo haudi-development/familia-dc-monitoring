@@ -75,7 +75,7 @@ export interface AlertCondition {
 
 export interface AlertAction {
   type: 'email' | 'webhook' | 'slack'
-  config: Record<string, any>
+  config: Record<string, string>
 }
 
 export interface AlertRule {
