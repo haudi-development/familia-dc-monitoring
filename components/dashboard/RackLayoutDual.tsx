@@ -32,26 +32,42 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
   const maxRow = 10
   const maxCol = 17
   
+  // 通路の配置を定義
+  const getCorridorType = (position: number): 'intake' | 'exhaust' | null => {
+    // 吸気側通路: A-B間, C-D間, E-F間, G-H間, I-J間, K-L間, M-N間, O-P間, Qの右
+    // 排気側通路: Aの左, B-C間, D-E間, F-G間, H-I間, J-K間, L-M間, N-O間, P-Q間
+    
+    const intakePositions = [1, 3, 5, 7, 9, 11, 13, 15, 17] // A-B, C-D, E-F, G-H, I-J, K-L, M-N, O-P, Q右
+    const exhaustPositions = [0, 2, 4, 6, 8, 10, 12, 14, 16] // A左, B-C, D-E, F-G, H-I, J-K, L-M, N-O, P-Q
+    
+    if (intakePositions.includes(position)) return 'intake'
+    if (exhaustPositions.includes(position)) return 'exhaust'
+    return null
+  }
+  
   return (
     <div className="bg-white rounded-lg shadow-sm border border-[var(--color-border)] p-6 overflow-x-auto">
       <div className="min-w-[1400px]">
         {/* Column labels with corridor indicators */}
         <div className="mb-4">
           {/* Column labels */}
-          <div className="flex">
+          <div className="flex items-start">
             <div className="w-10"></div>
-            <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-              {[...Array(maxCol)].map((_, i) => (
-                <div key={i} className="w-14 text-center text-sm font-bold text-gray-700">
-                  {String.fromCharCode(65 + i)}
+            <div className="w-6 mr-1"></div>
+            {[...Array(maxCol)].map((_, colIndex) => (
+              <div key={colIndex} className="flex items-start">
+                <div className="w-14 text-center text-sm font-bold text-gray-700">
+                  {String.fromCharCode(65 + colIndex)}
                 </div>
-              ))}
-            </div>
+                {colIndex < maxCol - 1 && <div className="w-6 mx-1"></div>}
+              </div>
+            ))}
+            <div className="w-6 ml-1"></div>
             <div className="w-10"></div>
           </div>
         </div>
         
-        {/* Rack grid with row numbers */}
+        {/* Rack grid with row numbers and corridors */}
         <div className="flex">
           {/* Row numbers */}
           <div className="grid grid-rows-10 gap-1">
@@ -63,266 +79,154 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
           </div>
           
           {/* Rack grid with corridor indicators */}
-          <div className="relative">
-            {/* Corridor indicators */}
-            <div className="absolute inset-0 grid grid-cols-33 gap-0 pointer-events-none" style={{ gridTemplateColumns: 'auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto 56px auto' }}>
-              {/* Left exhaust corridor */}
-              <div className="flex flex-col items-center justify-center bg-red-50/50 border-x border-red-200/50" style={{ marginLeft: '-20px', width: '30px' }}>
-                <ArrowUp className="h-4 w-4 text-red-500 mb-1" />
-                <span className="text-[10px] font-medium text-red-600 rotate-90">排気</span>
-                <ArrowUp className="h-4 w-4 text-red-500 mt-1" />
-              </div>
-              
-              {/* A column */}
-              <div></div>
-              
-              {/* A-B intake corridor */}
-              <div className="flex flex-col items-center justify-center bg-blue-50/50 border-x border-blue-200/50">
-                <ArrowDown className="h-4 w-4 text-blue-500 mb-1" />
-                <span className="text-[10px] font-medium text-blue-600 rotate-90">吸気</span>
-                <ArrowDown className="h-4 w-4 text-blue-500 mt-1" />
-              </div>
-              
-              {/* B column */}
-              <div></div>
-              
-              {/* B-C exhaust corridor */}
-              <div className="flex flex-col items-center justify-center bg-red-50/50 border-x border-red-200/50">
-                <ArrowUp className="h-4 w-4 text-red-500 mb-1" />
-                <span className="text-[10px] font-medium text-red-600 rotate-90">排気</span>
-                <ArrowUp className="h-4 w-4 text-red-500 mt-1" />
-              </div>
-              
-              {/* C column */}
-              <div></div>
-              
-              {/* C-D intake corridor */}
-              <div className="flex flex-col items-center justify-center bg-blue-50/50 border-x border-blue-200/50">
-                <ArrowDown className="h-4 w-4 text-blue-500 mb-1" />
-                <span className="text-[10px] font-medium text-blue-600 rotate-90">吸気</span>
-                <ArrowDown className="h-4 w-4 text-blue-500 mt-1" />
-              </div>
-              
-              {/* D column */}
-              <div></div>
-              
-              {/* D-E exhaust corridor */}
-              <div className="flex flex-col items-center justify-center bg-red-50/50 border-x border-red-200/50">
-                <ArrowUp className="h-4 w-4 text-red-500 mb-1" />
-                <span className="text-[10px] font-medium text-red-600 rotate-90">排気</span>
-                <ArrowUp className="h-4 w-4 text-red-500 mt-1" />
-              </div>
-              
-              {/* Continue pattern for remaining columns... */}
-              {/* E column */}
-              <div></div>
-              
-              {/* E-F intake corridor */}
-              <div className="flex flex-col items-center justify-center bg-blue-50/50 border-x border-blue-200/50">
-                <ArrowDown className="h-4 w-4 text-blue-500 mb-1" />
-                <span className="text-[10px] font-medium text-blue-600 rotate-90">吸気</span>
-                <ArrowDown className="h-4 w-4 text-blue-500 mt-1" />
-              </div>
-              
-              {/* F column */}
-              <div></div>
-              
-              {/* F-G exhaust corridor */}
-              <div className="flex flex-col items-center justify-center bg-red-50/50 border-x border-red-200/50">
-                <ArrowUp className="h-4 w-4 text-red-500 mb-1" />
-                <span className="text-[10px] font-medium text-red-600 rotate-90">排気</span>
-                <ArrowUp className="h-4 w-4 text-red-500 mt-1" />
-              </div>
-              
-              {/* G column */}
-              <div></div>
-              
-              {/* G-H intake corridor */}
-              <div className="flex flex-col items-center justify-center bg-blue-50/50 border-x border-blue-200/50">
-                <ArrowDown className="h-4 w-4 text-blue-500 mb-1" />
-                <span className="text-[10px] font-medium text-blue-600 rotate-90">吸気</span>
-                <ArrowDown className="h-4 w-4 text-blue-500 mt-1" />
-              </div>
-              
-              {/* H column */}
-              <div></div>
-              
-              {/* H-I exhaust corridor */}
-              <div className="flex flex-col items-center justify-center bg-red-50/50 border-x border-red-200/50">
-                <ArrowUp className="h-4 w-4 text-red-500 mb-1" />
-                <span className="text-[10px] font-medium text-red-600 rotate-90">排気</span>
-                <ArrowUp className="h-4 w-4 text-red-500 mt-1" />
-              </div>
-              
-              {/* I column */}
-              <div></div>
-              
-              {/* I-J intake corridor */}
-              <div className="flex flex-col items-center justify-center bg-blue-50/50 border-x border-blue-200/50">
-                <ArrowDown className="h-4 w-4 text-blue-500 mb-1" />
-                <span className="text-[10px] font-medium text-blue-600 rotate-90">吸気</span>
-                <ArrowDown className="h-4 w-4 text-blue-500 mt-1" />
-              </div>
-              
-              {/* J column */}
-              <div></div>
-              
-              {/* J-K exhaust corridor */}
-              <div className="flex flex-col items-center justify-center bg-red-50/50 border-x border-red-200/50">
-                <ArrowUp className="h-4 w-4 text-red-500 mb-1" />
-                <span className="text-[10px] font-medium text-red-600 rotate-90">排気</span>
-                <ArrowUp className="h-4 w-4 text-red-500 mt-1" />
-              </div>
-              
-              {/* K column */}
-              <div></div>
-              
-              {/* K-L intake corridor */}
-              <div className="flex flex-col items-center justify-center bg-blue-50/50 border-x border-blue-200/50">
-                <ArrowDown className="h-4 w-4 text-blue-500 mb-1" />
-                <span className="text-[10px] font-medium text-blue-600 rotate-90">吸気</span>
-                <ArrowDown className="h-4 w-4 text-blue-500 mt-1" />
-              </div>
-              
-              {/* L column */}
-              <div></div>
-              
-              {/* L-M exhaust corridor */}
-              <div className="flex flex-col items-center justify-center bg-red-50/50 border-x border-red-200/50">
-                <ArrowUp className="h-4 w-4 text-red-500 mb-1" />
-                <span className="text-[10px] font-medium text-red-600 rotate-90">排気</span>
-                <ArrowUp className="h-4 w-4 text-red-500 mt-1" />
-              </div>
-              
-              {/* M column */}
-              <div></div>
-              
-              {/* M-N intake corridor */}
-              <div className="flex flex-col items-center justify-center bg-blue-50/50 border-x border-blue-200/50">
-                <ArrowDown className="h-4 w-4 text-blue-500 mb-1" />
-                <span className="text-[10px] font-medium text-blue-600 rotate-90">吸気</span>
-                <ArrowDown className="h-4 w-4 text-blue-500 mt-1" />
-              </div>
-              
-              {/* N column */}
-              <div></div>
-              
-              {/* N-O exhaust corridor */}
-              <div className="flex flex-col items-center justify-center bg-red-50/50 border-x border-red-200/50">
-                <ArrowUp className="h-4 w-4 text-red-500 mb-1" />
-                <span className="text-[10px] font-medium text-red-600 rotate-90">排気</span>
-                <ArrowUp className="h-4 w-4 text-red-500 mt-1" />
-              </div>
-              
-              {/* O column */}
-              <div></div>
-              
-              {/* O-P intake corridor */}
-              <div className="flex flex-col items-center justify-center bg-blue-50/50 border-x border-blue-200/50">
-                <ArrowDown className="h-4 w-4 text-blue-500 mb-1" />
-                <span className="text-[10px] font-medium text-blue-600 rotate-90">吸気</span>
-                <ArrowDown className="h-4 w-4 text-blue-500 mt-1" />
-              </div>
-              
-              {/* P column */}
-              <div></div>
-              
-              {/* P-Q exhaust corridor */}
-              <div className="flex flex-col items-center justify-center bg-red-50/50 border-x border-red-200/50">
-                <ArrowUp className="h-4 w-4 text-red-500 mb-1" />
-                <span className="text-[10px] font-medium text-red-600 rotate-90">排気</span>
-                <ArrowUp className="h-4 w-4 text-red-500 mt-1" />
-              </div>
-              
-              {/* Q column */}
-              <div></div>
-              
-              {/* Right intake corridor */}
-              <div className="flex flex-col items-center justify-center bg-blue-50/50 border-x border-blue-200/50" style={{ marginRight: '-20px', width: '30px' }}>
-                <ArrowDown className="h-4 w-4 text-blue-500 mb-1" />
-                <span className="text-[10px] font-medium text-blue-600 rotate-90">吸気</span>
-                <ArrowDown className="h-4 w-4 text-blue-500 mt-1" />
+          <div className="flex items-start">
+            {/* Left corridor */}
+            <div className="w-6 bg-red-50/50 border-x border-red-200/50 mr-1">
+              <div className="grid grid-rows-10 gap-1 h-full">
+                {[...Array(maxRow)].map((_, i) => (
+                  <div key={i} className="h-12 flex flex-col items-center justify-center">
+                    {(i === 0 || i === 4 || i === 9) && (
+                      <>
+                        <ArrowUp className="h-3 w-3 text-red-500 mb-0.5" />
+                        <span className="text-[8px] font-medium text-red-600 writing-mode-vertical">排気</span>
+                        <ArrowUp className="h-3 w-3 text-red-500 mt-0.5" />
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
             
-            {/* Rack grid */}
-            <div className="grid grid-cols-17 gap-x-5 gap-y-1 relative z-10" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-              {[...Array(maxRow)].map((_, row) => (
-                [...Array(maxCol)].map((_, col) => {
-                  const rack = racks.find(r => r.row === row + 1 && r.col === col + 1)
-                  if (!rack) {
-                    return <div key={`empty-${row}-${col}`} className="w-14 h-12"></div>
-                  }
-                  
-                  const sensorData = sensorMap.get(rack.rack_id)
-                  if (!sensorData) return <div key={`no-sensor-${row}-${col}`} className="w-14 h-12"></div>
-                  
-                  const intakeValue = sensorData.intake[metricType]
-                  const exhaustValue = sensorData.exhaust[metricType]
-                  
-                  const intakeColor = getHeatmapColor(intakeValue, metricType)
-                  const exhaustColor = getHeatmapColor(exhaustValue, metricType)
-                  
-                  const isHovered = hoveredRack === rack.rack_id
-                  const positions = determineSensorPositions(rack)
-                  
-                  return (
-                    <div
-                      key={rack.rack_id}
-                      className={cn(
-                        'relative w-14 h-12 rounded-sm transition-all duration-200 cursor-pointer',
-                        'flex border border-gray-300 overflow-hidden',
-                        isHovered && 'scale-110 z-10 shadow-xl ring-2 ring-gray-800'
-                      )}
-                      onMouseEnter={() => setHoveredRack(rack.rack_id)}
-                      onMouseLeave={() => setHoveredRack(null)}
-                      onClick={() => onRackClick?.(rack)}
-                    >
-                      {/* Split display for intake and exhaust */}
-                      <div 
-                        className="w-1/2 h-full flex items-center justify-center"
-                        style={{ 
-                          backgroundColor: positions.intake === 'left' ? intakeColor : exhaustColor,
-                          borderRight: '1px solid rgba(0,0,0,0.2)'
-                        }}
+            {/* Racks and corridors */}
+            {[...Array(maxCol)].map((_, colIndex) => (
+              <div key={colIndex} className="flex items-start">
+                {/* Rack column */}
+                <div className="grid grid-rows-10 gap-1">
+                  {[...Array(maxRow)].map((_, rowIndex) => {
+                    const rack = racks.find(r => r.row === rowIndex + 1 && r.col === colIndex + 1)
+                    if (!rack) {
+                      return <div key={`empty-${rowIndex}-${colIndex}`} className="w-14 h-12"></div>
+                    }
+                    
+                    const sensorData = sensorMap.get(rack.rack_id)
+                    if (!sensorData) return <div key={`no-sensor-${rowIndex}-${colIndex}`} className="w-14 h-12"></div>
+                    
+                    const intakeValue = sensorData.intake[metricType]
+                    const exhaustValue = sensorData.exhaust[metricType]
+                    
+                    const intakeColor = getHeatmapColor(intakeValue, metricType)
+                    const exhaustColor = getHeatmapColor(exhaustValue, metricType)
+                    
+                    const isHovered = hoveredRack === rack.rack_id
+                    const positions = determineSensorPositions(rack)
+                    
+                    return (
+                      <div
+                        key={rack.rack_id}
+                        className={cn(
+                          'relative w-14 h-12 rounded-sm transition-all duration-200 cursor-pointer',
+                          'flex border border-gray-300 overflow-hidden',
+                          isHovered && 'scale-110 z-10 shadow-xl ring-2 ring-gray-800'
+                        )}
+                        onMouseEnter={() => setHoveredRack(rack.rack_id)}
+                        onMouseLeave={() => setHoveredRack(null)}
+                        onClick={() => onRackClick?.(rack)}
                       >
-                      </div>
-                      <div 
-                        className="w-1/2 h-full flex items-center justify-center"
-                        style={{ 
-                          backgroundColor: positions.intake === 'right' ? intakeColor : exhaustColor 
-                        }}
-                      >
-                      </div>
-                      
-                      {/* Rack identifier */}
-                      <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white pointer-events-none">
-                        {rack.column_label}{rack.row}
-                      </span>
-                      
-                      {/* Hover tooltip */}
-                      {isHovered && (
-                        <div className={cn(
-                          "absolute left-1/2 transform -translate-x-1/2 bg-gray-900 text-white p-3 rounded shadow-lg text-xs whitespace-nowrap z-20",
-                          rack.row <= 3 ? "top-full mt-2" : "bottom-full mb-2"
-                        )}>
-                          <div className="font-semibold mb-2">{rack.rack_id}</div>
-                          <div className="space-y-1">
-                            <div>位置: {rack.column_label}列 {rack.row}行</div>
-                            <div className="border-t border-gray-700 pt-1">
-                              <div>吸気側: {formatMetricValue(intakeValue, metricType)}</div>
-                              <div>排気側: {formatMetricValue(exhaustValue, metricType)}</div>
-                            </div>
-                            <div className="border-t border-gray-700 pt-1 font-semibold">
-                              温度差: {Math.abs(exhaustValue - intakeValue).toFixed(1)}°C
+                        {/* Split display for intake and exhaust */}
+                        <div 
+                          className="w-1/2 h-full flex items-center justify-center"
+                          style={{ 
+                            backgroundColor: positions.intake === 'left' ? intakeColor : exhaustColor,
+                            borderRight: '1px solid rgba(0,0,0,0.2)'
+                          }}
+                        >
+                        </div>
+                        <div 
+                          className="w-1/2 h-full flex items-center justify-center"
+                          style={{ 
+                            backgroundColor: positions.intake === 'right' ? intakeColor : exhaustColor 
+                          }}
+                        >
+                        </div>
+                        
+                        {/* Rack identifier */}
+                        <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white pointer-events-none">
+                          {rack.column_label}{rack.row}
+                        </span>
+                        
+                        {/* Hover tooltip */}
+                        {isHovered && (
+                          <div className={cn(
+                            "absolute left-1/2 transform -translate-x-1/2 bg-gray-900 text-white p-3 rounded shadow-lg text-xs whitespace-nowrap z-20",
+                            rack.row <= 3 ? "top-full mt-2" : "bottom-full mb-2"
+                          )}>
+                            <div className="font-semibold mb-2">{rack.rack_id}</div>
+                            <div className="space-y-1">
+                              <div>位置: {rack.column_label}列 {rack.row}行</div>
+                              <div className="border-t border-gray-700 pt-1">
+                                <div>吸気側: {formatMetricValue(intakeValue, metricType)}</div>
+                                <div>排気側: {formatMetricValue(exhaustValue, metricType)}</div>
+                              </div>
+                              <div className="border-t border-gray-700 pt-1 font-semibold">
+                                温度差: {Math.abs(exhaustValue - intakeValue).toFixed(1)}°C
+                              </div>
                             </div>
                           </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+                
+                {/* Corridor after column (except after Q) */}
+                {colIndex < maxCol - 1 && (
+                  <div className={cn(
+                    "w-6 mx-1",
+                    getCorridorType(colIndex + 1) === 'intake' 
+                      ? "bg-blue-50/50 border-x border-blue-200/50" 
+                      : "bg-red-50/50 border-x border-red-200/50"
+                  )}>
+                    <div className="grid grid-rows-10 gap-1 h-full">
+                      {[...Array(maxRow)].map((_, i) => (
+                        <div key={i} className="h-12 flex flex-col items-center justify-center">
+                          {(i === 0 || i === 4 || i === 9) && (
+                            getCorridorType(colIndex + 1) === 'intake' ? (
+                              <>
+                                <ArrowDown className="h-3 w-3 text-blue-500 mb-0.5" />
+                                <span className="text-[8px] font-medium text-blue-600 writing-mode-vertical">吸気</span>
+                                <ArrowDown className="h-3 w-3 text-blue-500 mt-0.5" />
+                              </>
+                            ) : (
+                              <>
+                                <ArrowUp className="h-3 w-3 text-red-500 mb-0.5" />
+                                <span className="text-[8px] font-medium text-red-600 writing-mode-vertical">排気</span>
+                                <ArrowUp className="h-3 w-3 text-red-500 mt-0.5" />
+                              </>
+                            )
+                          )}
                         </div>
-                      )}
+                      ))}
                     </div>
-                  )
-                })
-              ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            {/* Right corridor */}
+            <div className="w-6 bg-blue-50/50 border-x border-blue-200/50 ml-1">
+              <div className="grid grid-rows-10 gap-1 h-full">
+                {[...Array(maxRow)].map((_, i) => (
+                  <div key={i} className="h-12 flex flex-col items-center justify-center">
+                    {(i === 0 || i === 4 || i === 9) && (
+                      <>
+                        <ArrowDown className="h-3 w-3 text-blue-500 mb-0.5" />
+                        <span className="text-[8px] font-medium text-blue-600 writing-mode-vertical">吸気</span>
+                        <ArrowDown className="h-3 w-3 text-blue-500 mt-0.5" />
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           
@@ -337,15 +241,18 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
         </div>
         
         {/* Column labels at the bottom */}
-        <div className="flex mt-2">
+        <div className="flex items-start mt-2">
           <div className="w-10"></div>
-          <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
-            {[...Array(maxCol)].map((_, i) => (
-              <div key={i} className="w-14 text-center text-sm font-bold text-gray-700">
-                {String.fromCharCode(65 + i)}
+          <div className="w-6 mr-1"></div>
+          {[...Array(maxCol)].map((_, colIndex) => (
+            <div key={colIndex} className="flex items-start">
+              <div className="w-14 text-center text-sm font-bold text-gray-700">
+                {String.fromCharCode(65 + colIndex)}
               </div>
-            ))}
-          </div>
+              {colIndex < maxCol - 1 && <div className="w-6 mx-1"></div>}
+            </div>
+          ))}
+          <div className="w-6 ml-1"></div>
           <div className="w-10"></div>
         </div>
         

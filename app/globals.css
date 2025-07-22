@@ -57,3 +57,9 @@ body {
 .heatmap-cell:hover {
   transform: scale(1.1);
 }
+
+/* Custom utilities for vertical text */
+.writing-mode-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
