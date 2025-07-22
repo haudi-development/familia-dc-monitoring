@@ -36,71 +36,51 @@ export function RackLayoutDual({ racks, sensors, metricType, onRackClick }: Rack
     <div className="bg-white rounded-lg shadow-sm border border-[var(--color-border)] p-6 overflow-x-auto">
       <div className="min-w-[1400px]">
         {/* Column labels with corridor indicators */}
-        <div className="relative mb-2">
+        <div className="mb-4">
           {/* 通路表示 */}
-          <div className="absolute top-0 left-0 right-0 flex">
+          <div className="flex mb-2">
             <div className="w-10"></div>
-            <div className="relative" style={{ width: 'calc(100% - 5rem)' }}>
-              {/* 吸気通路 */}
-              <div className="absolute left-0" style={{ left: 'calc(14px + 14px / 2 - 2px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-blue-600">吸気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 2 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-blue-600">吸気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 4 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-blue-600">吸気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 6 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-blue-600">吸気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 8 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-blue-600">吸気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 10 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-blue-600">吸気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 12 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-blue-600">吸気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 14 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-blue-600">吸気</span>
-              </div>
-              
-              {/* 排気通路 */}
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 1 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-red-600">排気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 3 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-red-600">排気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 5 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-red-600">排気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 7 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-red-600">排気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 9 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-red-600">排気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 11 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-red-600">排気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 13 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-red-600">排気</span>
-              </div>
-              <div className="absolute" style={{ left: 'calc((56px + 20px) * 15 + 14px + 14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-red-600">排気</span>
-              </div>
-              <div className="absolute right-0" style={{ right: 'calc(14px / 2 - 12px)', top: '-20px' }}>
-                <span className="text-[11px] font-medium text-red-600">排気</span>
-              </div>
+            <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
+              {[...Array(maxCol + 1)].map((_, i) => {
+                // 通路位置の判定
+                const isIntakeCorridor = i === 0 || (i === 2 || i === 4 || i === 6 || i === 8 || i === 10 || i === 12 || i === 14 || i === 16)
+                const isExhaustCorridor = (i === 1 || i === 3 || i === 5 || i === 7 || i === 9 || i === 11 || i === 13 || i === 15 || i === 17)
+                
+                if (i === 0) {
+                  // 左端の排気
+                  return (
+                    <div key={i} className="w-7 text-center text-[11px] font-medium text-red-600">
+                      排気
+                    </div>
+                  )
+                } else if (i === 17) {
+                  // 右端の排気
+                  return (
+                    <div key={i} className="w-7 text-center text-[11px] font-medium text-red-600" style={{ marginLeft: '-20px' }}>
+                      排気
+                    </div>
+                  )
+                } else if (i < 17) {
+                  // 列間の通路
+                  return (
+                    <div key={i} className="flex justify-center" style={{ width: '76px', marginLeft: '-38px', marginRight: '-38px' }}>
+                      {isIntakeCorridor && (
+                        <span className="text-[11px] font-medium text-blue-600">吸気</span>
+                      )}
+                      {isExhaustCorridor && (
+                        <span className="text-[11px] font-medium text-red-600">排気</span>
+                      )}
+                    </div>
+                  )
+                }
+                return null
+              })}
             </div>
             <div className="w-10"></div>
           </div>
           
           {/* Column labels */}
-          <div className="flex mt-6">
+          <div className="flex">
             <div className="w-10"></div>
             <div className="grid grid-cols-17 gap-x-5" style={{ gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))` }}>
               {[...Array(maxCol)].map((_, i) => (
