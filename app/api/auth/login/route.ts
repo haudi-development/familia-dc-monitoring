@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'crypto'
 
 // Simple authentication - In production, use proper authentication with hashed passwords
 const VALID_CREDENTIALS = {
   username: 'admin',
   password: 'password123'
+}
+
+// Generate a session token
+function generateSessionToken(): string {
+  return crypto.randomBytes(32).toString('hex')
 }
 
 export async function POST(request: NextRequest) {
@@ -16,12 +22,15 @@ export async function POST(request: NextRequest) {
       // Create response with authentication cookie
       const response = NextResponse.json({ success: true })
       
+      // Generate session token
+      const sessionToken = generateSessionToken()
+      
       // Set HTTP-only cookie for authentication
-      response.cookies.set('auth-token', 'demo-auth-token', {
+      response.cookies.set('auth-token', sessionToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 60 * 60 * 24 * 7, // 1 week
+        maxAge: parseInt(process.env.SESSION_MAX_AGE || '604800'), // Default 1 week
         path: '/'
       })
       
